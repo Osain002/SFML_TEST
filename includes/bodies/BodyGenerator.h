@@ -15,7 +15,6 @@ class BodyGenerator {
 
     // Define a body
     struct Body {
-      string id;
       double x;
       double y;
       double vx;

@@ -48,7 +48,6 @@ bool QuadTree::insert_point(const std::shared_ptr<BodyGenerator::Body>& body) {
 
   // Add the point to this node
   if (points.size() < node_capacity) {
-    body->node = this;
     node_mass = body->mass;
     points.push_back(body);
     return true;
@@ -59,9 +58,6 @@ bool QuadTree::insert_point(const std::shared_ptr<BodyGenerator::Body>& body) {
   if (!divided) {
     divide();
   }
-
-  // Push the point to a child node
-  body->node = nullptr;
   
   for (auto& child : children) {
     if (child->insert_point(body)) {
