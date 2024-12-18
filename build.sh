@@ -1,0 +1,1 @@
+g++ sfml.cpp -I/opt/homebrew/Cellar/sfml/2.6.2/include -o prog -L/opt/homebrew/Cellar/sfml/2.6.2/lib -lsfml-window -lsfml-graphics -lsfml-system
