@@ -24,8 +24,8 @@ void Renderer::draw_point(double x, double y) {
 void Renderer::draw_tree(QuadTree& tree) {
   
   // Draw the bounding box
-  std::shared_ptr<BoundingBox> box = tree.get_box();
-  draw_rectangle(box->x, box->y, box->width, box->height);
+  const BoundingBox& box = tree.get_box();
+  draw_rectangle(box.x, box.y, box.width, box.height);
 
   // Check if the node has been divided
   if (!tree.check_divided()) {

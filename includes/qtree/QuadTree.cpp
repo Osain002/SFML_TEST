@@ -6,7 +6,7 @@
 
 // Construct the object
 QuadTree::QuadTree(BoundingBox& box, int capacity): 
-  bounding_box(std::make_shared<BoundingBox>(box)), 
+  bounding_box(box), 
   node_capacity(capacity) {
   points.reserve(node_capacity);
 }
@@ -26,10 +26,6 @@ void QuadTree::clear(bool is_child) {
   }
 
   // Reset the bounding boxes
-  if (is_child) {
-    bounding_box.reset();
-  }
-
   divided = false;
 }
 
@@ -37,7 +33,7 @@ void QuadTree::clear(bool is_child) {
 bool QuadTree::insert_point(const std::shared_ptr<BodyGenerator::Body>& body) {
   
   // Ensure the point fits in this node's box
-  if (!bounding_box->contains_body(*body)) {
+  if (!bounding_box.contains_body(*body)) {
     return false;
   }
 
@@ -97,14 +93,14 @@ void QuadTree::divide() {
   node_mass = 0.0f;
 
   // The new box dimensions
-  double new_width = 0.5 * bounding_box->width;
-  double new_height = 0.5 * bounding_box->height;
+  double new_width = 0.5 * bounding_box.width;
+  double new_height = 0.5 * bounding_box.height;
 
   // Create the bounding boxes
-  BoundingBox box_1(bounding_box->x, bounding_box->y, new_width, new_height);
-  BoundingBox box_2(bounding_box->x + new_width, bounding_box->y, new_width, new_height);
-  BoundingBox box_3(bounding_box->x, bounding_box->y + new_height, new_width, new_height);
-  BoundingBox box_4(bounding_box->x + new_width, bounding_box->y + new_height, new_width, new_height);
+  BoundingBox box_1(bounding_box.x, bounding_box.y, new_width, new_height);
+  BoundingBox box_2(bounding_box.x + new_width, bounding_box.y, new_width, new_height);
+  BoundingBox box_3(bounding_box.x, bounding_box.y + new_height, new_width, new_height);
+  BoundingBox box_4(bounding_box.x + new_width, bounding_box.y + new_height, new_width, new_height);
 
   // Create the child nodes
   children[0] = std::make_unique<QuadTree>(box_1, node_capacity);
@@ -138,7 +134,7 @@ void QuadTree::print(int indent) {
 
   // Print general info
   std::string line(indent, ' ');
-  std::cout << line << "BOX (" << bounding_box->x << ", " << bounding_box->y << ", " << bounding_box->width << ", " << bounding_box->height << ")" << endl;
+  std::cout << line << "BOX (" << bounding_box.x << ", " << bounding_box.y << ", " << bounding_box.width << ", " << bounding_box.height << ")" << endl;
   std::cout << line << "CAPACITY " << node_capacity << endl;
   
   // Print the points

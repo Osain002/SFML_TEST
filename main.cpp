@@ -15,11 +15,11 @@ int main() {
   srand(time(0));
 
   // Setup the window and renderer
-  sf::RenderWindow window(sf::VideoMode(500, 500), "N-Body");
+  sf::RenderWindow window(sf::VideoMode(1000, 700), "N-Body");
   Renderer renderer(window);
   
   // Setup the universe
-  Universe universe(30000, renderer);
+  Universe universe(20000, renderer);
 
   while (window.isOpen()) {
 
@@ -31,7 +31,7 @@ int main() {
 
     // Render the universe
     window.clear();   
-    universe.evolve(0.01);
+    universe.evolve(0.1);
     window.display();
   }
 

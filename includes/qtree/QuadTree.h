@@ -43,7 +43,7 @@ class QuadTree {
     void print(int indent=0);
     
     // Get the bounding box for this node
-    std::shared_ptr<BoundingBox> get_box() const {
+    const BoundingBox& get_box() const {
       return bounding_box;
     }
 
@@ -66,7 +66,7 @@ class QuadTree {
   private:
 
     // The bounding box for the node
-    std::shared_ptr<BoundingBox> bounding_box;
+    BoundingBox bounding_box;
 
     // The points currently in this node
     vector<std::shared_ptr<BodyGenerator::Body>> points;

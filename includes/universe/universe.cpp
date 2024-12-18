@@ -61,9 +61,11 @@ void Universe::print_bodies() {
 //==== Private section
 
 // Calculate the force
-Universe::Vector Universe::calculate_force(double x1, double y1, double x2, double y2, double m1, double m2) {
+std::vector<double> Universe::calculate_force(double x1, double y1, double x2, double y2, double m1, double m2) {
   
-  Universe::Vector result;
+  std::vector<double> result;
+  result.reserve(2);
+
   if (x1 == x2 && y1 == y2) {
     return result;
   }
@@ -75,18 +77,18 @@ Universe::Vector Universe::calculate_force(double x1, double y1, double x2, doub
   // Calculate the force magnitude
   double distance_squared = dx * dx + dy * dy;
   double distance = sqrt(distance_squared);
-  double force_magnitude = (G * m1 * m2) / (distance_squared + 200);
+  double force_magnitude = (G * m1 * m2) / (distance_squared + 1);
 
-  result.x = (dx * force_magnitude) / distance;
-  result.y = (dy * force_magnitude) / distance;
+  result[0] = (dx * force_magnitude) / distance;
+  result[1] = (dy * force_magnitude) / distance;
 
   return result;
 }
 
 // Update particle position
-void Universe::update_particle(BodyGenerator::Body& body, Universe::Vector force, double dt) {
-  body.vx += dt * force.x / body.mass;
-  body.vy += dt * force.y / body.mass;
+void Universe::update_particle(BodyGenerator::Body& body, std::vector<double>& force, double dt) {
+  body.vx += dt * force[0] / body.mass;
+  body.vy += dt * force[1] / body.mass;
   body.x += body.vx * dt;
   body.y += body.vy * dt;
 }
@@ -100,12 +102,12 @@ void Universe::update_positions(std::shared_ptr<QuadTree> node, BodyGenerator::B
   }
 
   // Calculate the distances
-  double s = node->get_box()->width;
+  double s = node->get_box().width;
   double d = node->distance_from_center(body);
 
   // Update the position
   if (!node->divided || s/d < tolerance) {
-    Universe::Vector force = calculate_force(body.x, body.y, node->mass_center.x, node->mass_center.y, body.mass, node->node_mass);
+    std::vector<double> force = calculate_force(body.x, body.y, node->mass_center.x, node->mass_center.y, body.mass, node->node_mass);
     return update_particle(body, force, dt);
   }
 
